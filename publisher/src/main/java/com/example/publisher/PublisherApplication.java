@@ -1,19 +1,29 @@
 package com.example.publisher;
 
 import lombok.*;
+import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.common.serialization.StringSerializer;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Formula;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.kafka.annotation.EnableKafka;
+import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.core.ProducerFactory;
+import org.springframework.kafka.support.serializer.JsonSerializer;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.Map;
 
 @SpringBootApplication
 @EnableKafka
@@ -69,5 +79,24 @@ class KafkaService {
     public void send(Transaction message) {
         kafkaTemplate.send(TOPIC, message);
     }
+}
 
+@Configuration
+class KafkaProducerConfig {
+    @Value("${kafka.server}")
+    private String bootstrapServers;
+
+    @Bean
+    public ProducerFactory<String,Object> producerFactory(){
+        Map<String,Object> configProps=new HashMap<>();
+        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,bootstrapServers);
+        configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, org.apache.kafka.common.serialization.StringSerializer.class);
+        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, org.springframework.kafka.support.serializer.JsonSerializer.class);
+        return new DefaultKafkaProducerFactory<>(configProps);
+    }
+
+    @Bean
+    public KafkaTemplate<String,Object> kafkaTemplate(){
+        return new KafkaTemplate<>(producerFactory());
+    }
 }
