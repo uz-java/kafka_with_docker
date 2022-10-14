@@ -6,7 +6,10 @@ import org.hibernate.annotations.Formula;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.kafka.annotation.EnableKafka;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.stereotype.Service;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -28,7 +31,7 @@ public class PublisherApplication {
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-class Transaction{
+class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -48,7 +51,23 @@ class Transaction{
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-class TransferCreateVO{
+class TransferCreateVO {
     private String pan;
     private BigDecimal amount;
+}
+
+interface TransactionRepository extends JpaRepository<Transaction, Long> {
+
+}
+
+@Service
+@RequiredArgsConstructor
+class KafkaService {
+    public final String TOPIC = "pdp-topic";
+    private final KafkaTemplate<String, Object> kafkaTemplate;
+
+    public void send(Transaction message) {
+        kafkaTemplate.send(TOPIC, message);
+    }
+
 }
