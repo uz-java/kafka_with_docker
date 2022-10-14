@@ -11,13 +11,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -92,6 +92,12 @@ class TransactionService {
 @RequiredArgsConstructor
 class PublisherController {
     private final TransactionService service;
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Transaction transfer(@RequestBody TransferCreateVO vo) {
+        return service.create(vo);
+    }
 }
 
 @Service
