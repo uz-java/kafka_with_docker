@@ -41,5 +41,14 @@ class Transaction{
     @CreationTimestamp
     @Column(columnDefinition = "timestamp default current_timestamp")
     private Timestamp createdAt;
+}
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+class TransferCreateVO{
+    private String pan;
+    private BigDecimal amount;
 }
