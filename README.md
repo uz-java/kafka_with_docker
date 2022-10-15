@@ -1,4 +1,4 @@
-## Simple sub/pub application using apache kafka and spring boot
+# Simple sub/pub application using apache kafka and spring boot
 
 ### What is Apache Kafka?
 
@@ -85,8 +85,8 @@ docker-compose up -d
 ```
 ### How does Kafka work?
 
-![IMG1](IMG1.png)
+![IMG1](IMG1.jpg)
 
-![IMG2](IMG2.png)
+![IMG2](IMG2.jpg)
 
-![IMG3](IMG3.png)
+![IMG3](IMG3.jpg)
