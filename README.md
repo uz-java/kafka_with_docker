@@ -68,5 +68,9 @@ services:
       - zookeeper
 ```
 
+To deploy it, run the following command in the directory where the `docker-compose.yml` file is located:
 
-### [Article for checking out](https://www.javaguides.net/2022/06/spring-boot-apache-kafka-tutorial.html)
+```
+docker-compose up -d
+```
+
