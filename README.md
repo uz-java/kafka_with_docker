@@ -1,4 +1,4 @@
-# Simple sub/pub application using apache kafka and spring boot
+## Simple sub/pub application using apache kafka and spring boot
 
 ### What is Apache Kafka?
 
