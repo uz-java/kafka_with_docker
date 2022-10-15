@@ -1,4 +1,4 @@
-# Simple sub/pub application using apache kafka and spring boot
+## Simple sub/pub application using apache kafka and spring boot
 
 ### Run docker containers for kafka and zookeeper_
 ```yaml
