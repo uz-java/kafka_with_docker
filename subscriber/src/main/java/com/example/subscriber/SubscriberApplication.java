@@ -10,8 +10,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
+import org.springframework.kafka.support.converter.StringJsonMessageConverter;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.stereotype.Component;
 
@@ -69,5 +71,15 @@ class KafkaConsumerConfig{
         return new DefaultKafkaConsumerFactory<>(config,new StringDeserializer(),deserializer);
     }
 
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String,Transaction> transactionConcurrentKafkaListenerContainerFactory(){
+        ConcurrentKafkaListenerContainerFactory<String,Transaction> factory=new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(consumerFactory());
+        return factory;
+    }
 
+    @Bean
+    public StringJsonMessageConverter jsonMessageConverter(){
+        return new StringJsonMessageConverter();
+    }
 }
